@@ -19,11 +19,12 @@ public class Client {
     private String dni;
 
     public Client (String firsName, String lastName, String email,String dni){
-        firsName = this.firstName;
-        lastName = this.lastName;
-        email = this.email;
-        dni = this.dni;
+        this.firstName= firsName;
+        this.lastName = lastName;
+        this.email = email;
+        this.dni = dni;
     };
+    public Client (){};
     public Long getId() {
         return id;
     }
