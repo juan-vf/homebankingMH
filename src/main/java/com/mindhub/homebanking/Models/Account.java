@@ -55,7 +55,6 @@ public class Account {
         Balance = balance;
     }
 
-    @JsonIgnore
     public Client getClient() {
         return client;
     }
