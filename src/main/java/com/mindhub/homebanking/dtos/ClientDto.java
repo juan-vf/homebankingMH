@@ -14,14 +14,14 @@ public class ClientDto {
     private String email;
     private String dni;
 
-    private Set<AccountDto> accountDtoList;
+    private Set<AccountDto> accounts;
     public ClientDto(Client client) {
         this.id = client.getId();
         this.firstName = client.getFirstName();
         this.lastName = client.getLastName();
         this.email = client.getEmail();
         this.dni = client.getDni();
-        this.accountDtoList = client.getAccounts().stream().map(account -> new AccountDto(account)).collect(Collectors.toSet());
+        this.accounts = client.getAccounts().stream().map(account -> new AccountDto(account)).collect(Collectors.toSet());
     }
     public ClientDto (){};
 
@@ -49,8 +49,8 @@ public class ClientDto {
     }
 
 
-    public Set<AccountDto> getAccountDtoList() {
-        return accountDtoList;
+    public Set<AccountDto> getAccounts() {
+        return accounts;
     }
 
 }

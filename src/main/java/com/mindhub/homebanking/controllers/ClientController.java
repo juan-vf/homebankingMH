@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -26,7 +25,7 @@ public class ClientController {
     }
     @GetMapping("/clients/{id}")
     public ClientDto getClientById(@PathVariable Long id){
-        Optional<Client> clientOptional = clientR.findById(id);
-        return  new ClientDto(clientOptional.get());
+        Client client = clientR.findById(id).orElse(null);
+        return  new ClientDto(client);
     };
 }
