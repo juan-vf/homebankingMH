@@ -1,17 +1,16 @@
 package com.mindhub.homebanking;
 
 import com.mindhub.homebanking.enums.TransactionType;
-import com.mindhub.homebanking.models.Account;
-import com.mindhub.homebanking.models.Client;
-import com.mindhub.homebanking.models.Transaction;
-import com.mindhub.homebanking.repositories.AccountRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
-import com.mindhub.homebanking.repositories.TransactionRepository;
+import com.mindhub.homebanking.models.*;
+import com.mindhub.homebanking.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @SpringBootApplication
 public class HomebankingApplication {
@@ -21,7 +20,12 @@ public class HomebankingApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository){
+	public CommandLineRunner initData(ClientRepository clientRepository,
+									  AccountRepository accountRepository,
+									  TransactionRepository transactionRepository,
+									  LoanRepository loanRepository,
+									  ClientLoanRepository clientLoanRepository
+	){
 		return (args) -> {
 			Client client = new Client("Melba", "Morel", "melba@mindhub.com", "00.000.000");
 			clientRepository.save(client);
@@ -52,9 +56,30 @@ public class HomebankingApplication {
 			transactionRepository.save(transaction003);
 			transactionRepository.save(transaction004);
 
+			List<Integer> quotaList1 = new ArrayList<>();
+			Collections.addAll(quotaList1 ,12,24,36,48,60);
 
+			List<Integer> quotaList2 = new ArrayList<Integer>();
+			Collections.addAll(quotaList2 ,6,12,24);
 
-
+			List<Integer> quotaList3 = new ArrayList<Integer>();
+			Collections.addAll(quotaList3 ,6,12,24,36);
+			/*
+			Loan loan1 = new Loan("Hipotecario", "500.000", quotaList1);
+			Loan loan2 = new Loan("Personal", "100.000", quotaList2);
+			Loan loan3 = new Loan("Automotriz", "300.000", quotaList3);
+			loanRepository.save(loan1);
+			loanRepository.save(loan2);
+			loanRepository.save(loan3);
+			*/
+			Loan loan4 = new Loan("Hipotecario", "400.000", quotaList1);
+			loanRepository.save(loan4);
+			Loan loan2 = new Loan("Personal", "100.000", quotaList2);
+			loanRepository.save(loan2);
+			ClientLoan clientLoan1 = new ClientLoan("400.000", 60, client, loan4);
+			clientLoanRepository.save(clientLoan1);
+			ClientLoan clientLoan2 = new ClientLoan("50.000", 12, client, loan2);
+			clientLoanRepository.save(clientLoan2);
 
 		};
 	}
