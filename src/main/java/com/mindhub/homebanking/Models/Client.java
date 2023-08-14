@@ -22,12 +22,17 @@ public class Client {
 
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private Set<ClientLoan> loans;
+
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
+    private Set<Card> cards = new HashSet<>();
+
     public Client (String firsName, String lastName, String email, String dni){
         this.firstName= firsName;
         this.lastName = lastName;
         this.email = email;
         this.dni = dni;
     };
+
     public Client (){};
     public Long getId() {
         return id;
@@ -72,11 +77,19 @@ public class Client {
         account.setClient(this);
         accounts.add(account);
     }
-
     public Set<ClientLoan> getLoans() {
         return loans;
     }
     public void setLoans(Set<ClientLoan> loans) {
         this.loans = loans;
+    }
+
+    public Set<Card> getCards() {
+        return cards;
+    }
+
+    public void addCard(Card card) {
+        card.setClient(this);
+        this.cards.add(card);
     }
 }

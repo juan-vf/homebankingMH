@@ -1,5 +1,7 @@
 package com.mindhub.homebanking;
 
+import com.mindhub.homebanking.enums.CardColor;
+import com.mindhub.homebanking.enums.CardType;
 import com.mindhub.homebanking.enums.TransactionType;
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.*;
@@ -24,7 +26,8 @@ public class HomebankingApplication {
 									  AccountRepository accountRepository,
 									  TransactionRepository transactionRepository,
 									  LoanRepository loanRepository,
-									  ClientLoanRepository clientLoanRepository
+									  ClientLoanRepository clientLoanRepository,
+									  CardRepository cardRepository
 	){
 		return (args) -> {
 			Client client = new Client("Melba", "Morel", "melba@mindhub.com", "00.000.000");
@@ -81,6 +84,39 @@ public class HomebankingApplication {
 			ClientLoan clientLoan2 = new ClientLoan("50.000", 12, client, loan2);
 			clientLoanRepository.save(clientLoan2);
 
+			Card card1 = new Card(
+					"0000-0000-0000",
+					357,
+					LocalDate.now(),
+					LocalDate.now().plusYears(5),
+					client.getFirstName()+client.getLastName(),
+					CardType.CREDIT,
+					CardColor.GOLD
+			);
+			Card card2 = new Card(
+					"0000-0000-0001",
+					526,
+					LocalDate.now(),
+					LocalDate.now().plusYears(5),
+					client.getFirstName()+client.getLastName(),
+					CardType.CREDIT,
+					CardColor.TITANIUM
+			);
+			Card card3 = new Card(
+					"0000-0000-0002",
+					847,
+					LocalDate.now(),
+					LocalDate.now().plusYears(5),
+					client.getFirstName()+client.getLastName(),
+					CardType.DEBIT,
+					CardColor.SILVER
+			);
+			client.addCard(card1);
+			client.addCard(card2);
+			client.addCard(card3);
+			cardRepository.save(card1);
+			cardRepository.save(card2);
+			cardRepository.save(card3);
 		};
 	}
 
