@@ -12,7 +12,7 @@ public class ClientDto {
     private String firstName;
     private String lastName;
     private String email;
-    private String dni;
+    //private String dni;
 
     private Set<AccountDto> accounts;
     private Set<ClientLoanDTO>loans;
@@ -22,7 +22,7 @@ public class ClientDto {
         this.firstName = client.getFirstName();
         this.lastName = client.getLastName();
         this.email = client.getEmail();
-        this.dni = client.getDni();
+        //this.dni = client.getDni();
         this.accounts = client.getAccounts().stream().map(account -> new AccountDto(account)).collect(Collectors.toSet());
         this.loans = client.getLoans().stream().map(clientLoan -> new ClientLoanDTO(clientLoan)).collect(Collectors.toSet());
         this.cards = client.getCards().stream().map(card -> new CardDto(card)).collect(Collectors.toSet());
@@ -48,10 +48,11 @@ public class ClientDto {
     }
 
 
+    /*
     public String getDni() {
         return dni;
     }
-
+    */
 
     public Set<AccountDto> getAccounts() {
         return accounts;

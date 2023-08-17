@@ -4,12 +4,13 @@ import com.mindhub.homebanking.dtos.ClientDto;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -28,4 +29,26 @@ public class ClientController {
         Client client = clientR.findById(id).orElse(null);
         return  new ClientDto(client);
     };
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @RequestMapping(path = "/clients", method = RequestMethod.POST)
+    public ResponseEntity<Object> register(
+            @RequestParam String firsName,
+            @RequestParam String lastName,
+            @RequestParam String email,
+            @RequestParam String password
+    ){
+        if(firsName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()){
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+        if(clientR.findByEmail(email) != null){
+            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
+
+        }
+        Client client = new Client(firsName, lastName, email,passwordEncoder.encode(password));
+        clientR.save(client);
+        return new ResponseEntity<>("Client registered", HttpStatus.CREATED);
+    }
 }
