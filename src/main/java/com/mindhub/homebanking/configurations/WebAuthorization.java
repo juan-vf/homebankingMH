@@ -22,45 +22,32 @@ public class WebAuthorization{
 
         http.authorizeRequests()
 
-                .antMatchers("/admin/**").hasAuthority("ADMIN")
-
-                .antMatchers("/**").hasAuthority("USER")
-                .requestMatchers(HttpMethod.POST,"/api/clients").permitAll();
+                //.antMatchers("/admin/**").hasAuthority("ADMIN")
+                .antMatchers("/web/index.html", "/web/css/**", "/web/img/**", "/web/js/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/login.html").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/clients").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/clients").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/clients/current").hasAnyAuthority("CLIENT","ADMIN")
+                .antMatchers("/**").hasAuthority("CLIENT");
 
         http.formLogin()
 
-                .usernameParameter("name")
+                .usernameParameter("email")
 
-                .passwordParameter("pwd")
+                .passwordParameter("password")
 
-                .loginPage("/app/login");
-        http.logout().logoutUrl("/app/logout");
+                .loginPage("/api/login");
+        http.logout().logoutUrl("/api/logout");
 
         http.csrf().disable();
-
-
-
-        //disabling frameOptions so h2-console can be accessed
-
-        //httpSecurity.headers().frameOptions().disable();--> REVISAR
-
         http.headers().frameOptions().disable();
-
-        // if user is not authenticated, just send an authentication failure response
-
         http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
-
-        // if login is successful, just clear the flags asking for authentication
-
         http.formLogin().successHandler((req, res, auth) -> clearAuthenticationAttributes(req));
-
-        // if login fails, just send an authentication failure response
-
         http.formLogin().failureHandler((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
-
-        // if logout is successful, just send a success response
-
         http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
+
+
+
         return http.build();
     }
 
