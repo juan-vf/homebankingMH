@@ -41,13 +41,14 @@ public class HomebankingApplication {
 			Client client = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("123"));
 			clientRepository.save(client);
 
-			Account VIN001 = new Account("VIN001", LocalDate.now(), 5000.00);
-			Account VIN002 = new Account("VIN002", LocalDate.now().plusDays(1), 7500.00);
+			Account VIN001 = new Account("VIN-001", LocalDate.now(), 5000.00);
+			Account VIN002 = new Account("VIN-002", LocalDate.now().plusDays(1), 7500.00);
 			client.addAccount(VIN001);
 			client.addAccount(VIN002);
 
 			accountRepository.save(VIN001);
 			accountRepository.save(VIN002);
+			System.out.println(accountRepository.existsByNumber("VIN-001"));
 
 			Transaction transaction001 = new Transaction(TransactionType.CREDITO, LocalDate.now(), "Various", "25000");
 			Transaction transaction002 = new Transaction(TransactionType.DEBITO, LocalDate.now(), "Various", "-20000");
