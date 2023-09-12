@@ -58,7 +58,7 @@ public class ClientController {
         Client client = new Client(firstName, lastName, email,passwordEncoder.encode(password));
         clientR.save(client);
         //Generate account number/name
-        List<String> accountNumberExistList = accountRepository.findAllNumbers();
+        List<String> accountNumberExistList = accountRepository.findAllNumber();
         String accountNumber = getRandomNumberUsingNextInt(0000, 99999999, accountNumberExistList);
         //Generate account
         Account newAccount = new Account(accountNumber, LocalDate.now(), 0.0 );
@@ -81,7 +81,7 @@ public class ClientController {
             return new ResponseEntity<>("Ya tiene 3 cuentas", HttpStatus.FORBIDDEN);
         }
 
-        List<String> accountNumberExistList = accountRepository.findAllNumbers();
+        List<String> accountNumberExistList = accountRepository.findAllNumber();
         String accountNumber = getRandomNumberUsingNextInt(0000, 99999999, accountNumberExistList);
         Account newAccount = new Account( accountNumber, LocalDate.now(), 0.0);
         client.addAccount(newAccount);
